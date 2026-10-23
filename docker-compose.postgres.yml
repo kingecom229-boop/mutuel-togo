@@ -1,0 +1,26 @@
+# PostgreSQL local optionnel — pour tester la configuration production.
+# Usage :
+#   docker compose -f docker-compose.postgres.yml up -d
+#   Puis dans .env.local :
+#   DATABASE_URL="postgresql://mutuel:changez-moi@localhost:5432/mutuel_togo?schema=public"
+#   Et dans prisma/schema.prisma : provider = "postgresql"
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: mutuel-togo-postgres
+    environment:
+      POSTGRES_USER: mutuel
+      POSTGRES_PASSWORD: changez-moi
+      POSTGRES_DB: mutuel_togo
+    ports:
+      - "5432:5432"
+    volumes:
+      - mutuel_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mutuel -d mutuel_togo"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  mutuel_postgres_data:

@@ -1,0 +1,28 @@
+node_modules/
+.next/
+out/
+build/
+coverage/
+
+# Environnement — ne JAMAIS committer les vrais secrets
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Bases de donnees locales et fichiers prives des utilisateurs
+*.db
+*.db-journal
+.data/
+uploads/
+!uploads/.gitkeep
+
+# Logs et fichiers systeme
+*.log
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+*.tsbuildinfo
