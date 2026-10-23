@@ -159,7 +159,7 @@ export default function PageCredit() {
             value={reason}
             onChange={(e) => setReason(e.target.value)}
             required
-            minLength={10}
+            minLength={5}
             maxLength={1000}
             disabled={!approuve}
           />

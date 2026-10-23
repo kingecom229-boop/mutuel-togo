@@ -41,6 +41,7 @@ export default function PageAdminConversation({ params }: { params: Promise<{ us
         loadUrl={`/api/admin/messages/${userId}`}
         postUrl={`/api/admin/messages/${userId}`}
         ownRole="ADMIN"
+        basClasse="bottom-4"
         titreVide="Aucun message avec ce client"
         texteVide="Envoyez le premier message : décision de crédit, demande de document, confirmation de transfert..."
       />

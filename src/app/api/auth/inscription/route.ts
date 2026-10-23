@@ -24,7 +24,9 @@ export const POST = route(async (request: Request) => {
   const passwordHash = await hashPassword(body.password);
   const userId = randomUUID();
 
-  const user = await withTransaction(async (q) => {
+  let user;
+  try {
+    user = await withTransaction(async (q) => {
     await q(
       `INSERT INTO users (id, full_name, phone, password_hash, role, balance_fcfa)
        VALUES ($1, $2, $3, $4, 'USER', $5)`,
@@ -57,7 +59,15 @@ export const POST = route(async (request: Request) => {
     const created = rows[0];
     const view = await recomputeProfile(q, created);
     return { ...created, _profile: view };
-  });
+    });
+  } catch (error) {
+    // Deux inscriptions simultanées avec le même numéro : la contrainte UNIQUE protège.
+    const e = error as { code?: string; message?: string };
+    if (e.code === "23505" || (e.message ?? "").includes("users_phone_key")) {
+      throw new ApiError(409, "Un compte existe déjà avec ce numéro. Connectez-vous plutôt.");
+    }
+    throw error;
+  }
 
   await createSession({ id: user.id, role: user.role });
   const { _profile, ...sessionUser } = user;

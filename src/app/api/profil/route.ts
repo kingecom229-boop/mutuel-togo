@@ -2,7 +2,11 @@ import { ApiError, ok, readJson, route } from "@/server/http";
 import { requireUser, publicUser, findUserById } from "@/server/auth";
 import { query, withTransaction } from "@/server/db";
 import { profileUpdateSchema } from "@/server/validation";
-import { getProfileViewForUser, recomputeProfile } from "@/server/services/profile";
+import {
+  ensureProfile,
+  getProfileViewForUser,
+  recomputeProfile,
+} from "@/server/services/profile";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -30,6 +34,7 @@ export const PATCH = route(async (request: Request) => {
   }
 
   const view = await withTransaction(async (q) => {
+    await ensureProfile(q, user.id);
     if (body.fullName !== undefined || email !== undefined) {
       await q(
         `UPDATE users SET full_name = $1, email = $2, updated_at = NOW() WHERE id = $3`,

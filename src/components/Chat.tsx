@@ -13,13 +13,22 @@ interface ChatProps {
   ownRole: "USER" | "ADMIN";
   titreVide: string;
   texteVide: string;
+  /** Classe de position basse du champ de saisie (avec ou sans navbar mobile). */
+  basClasse?: string;
 }
 
 /**
  * Messagerie MUTUEL TOGO : discussion + Pieces jointes .
  * Actualisation légère toutes les 5 secondes (polling), sans websocket.
  */
-export default function Chat({ loadUrl, postUrl, ownRole, titreVide, texteVide }: ChatProps) {
+export default function Chat({
+  loadUrl,
+  postUrl,
+  ownRole,
+  titreVide,
+  texteVide,
+  basClasse = "bottom-[76px]",
+}: ChatProps) {
   const [messages, setMessages] = useState<ApiMessage[] | null>(null);
   const [texte, setTexte] = useState("");
   const [fichier, setFichier] = useState<File | null>(null);
@@ -106,7 +115,7 @@ export default function Chat({ loadUrl, postUrl, ownRole, titreVide, texteVide }
         <div ref={basRef} />
       </div>
 
-      <form onSubmit={envoyer} className="sticky bottom-[76px] mt-3 rounded-3xl border border-slate-200 bg-white p-2 shadow-doux dark:border-slate-800 dark:bg-slate-900">
+      <form onSubmit={envoyer} className={`sticky ${basClasse} mt-3 rounded-3xl border border-slate-200 bg-white p-2 shadow-doux dark:border-slate-800 dark:bg-slate-900`}>
         {fichier ? (
           <div className="flex items-center justify-between gap-2 px-2 pb-2 text-sm">
             <span className="flex min-w-0 items-center gap-2">

@@ -3,7 +3,7 @@
  * - Mot de passe : bcrypt (jamais stocke ni renvoye en clair).
  * - Le cookie n'est pas lisible par le JavaScript du navigateur (httpOnly).
  */
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { SignJWT, jwtVerify } from "jose";
 import bcrypt from "bcryptjs";
 import { queryOne } from "./db";
@@ -55,10 +55,19 @@ export async function createSession(user: { id: string; role: string }): Promise
     .sign(jwtSecretKey());
 
   const cookieStore = await cookies();
+  // Cookie Secure quand la requête arrive en HTTPS (production / proxy).
+  // En test local sur le Wi-Fi (http://192.168.x.x), un cookie Secure serait
+  // rejeté par les téléphones : forcez COOKIE_SECURE=true dès que le site
+  // est servi en HTTPS en production.
+  const headerStore = await headers();
+  const proto = (headerStore.get("x-forwarded-proto") ?? "").split(",")[0]?.trim();
+  const forceSecure = (process.env.COOKIE_SECURE ?? "").trim().toLowerCase();
+  const secure =
+    forceSecure === "true" ? true : forceSecure === "false" ? false : proto === "https";
   cookieStore.set(SESSION_COOKIE, token, {
     httpOnly: true,
     sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
+    secure,
     path: "/",
     maxAge: SESSION_DUREE_JOURS * 24 * 60 * 60,
   });

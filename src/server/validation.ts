@@ -125,7 +125,7 @@ export const loanSchema = z.object({
   reason: z
     .string()
     .trim()
-    .min(10, "Décrivez le motif de votre crédit en quelques mots (10 caractères minimum).")
+    .min(5, "Précisez le motif de votre crédit en quelques mots (5 caractères minimum).")
     .max(1000, "Le motif est trop long."),
 });
 
