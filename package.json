@@ -1,0 +1,42 @@
+{
+  "name": "mutuel-togo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MUTUEL TOGO - Plateforme de crédit en ligne pour particuliers et PME au Togo",
+  "scripts": {
+    "dev": "next dev -H 0.0.0.0 -p 3000",
+    "build": "next build",
+    "start": "next start -H 0.0.0.0 -p 3000",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts",
+    "db:migrate": "tsx --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/db-setup.ts",
+    "db:seed": "tsx --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/db-setup.ts",
+    "db:setup": "tsx --env-file-if-exists=.env.local --env-file-if-exists=.env scripts/db-setup.ts"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "jose": "^6.2.13",
+    "lucide-react": "^1.61.0",
+    "next": "^15.5.7",
+    "react": "^19.1.10",
+    "react-dom": "^19.1.10",
+    "zod": "^3.25.76",
+    "@electric-sql/pglite": "^0.3.0",
+    "pg": "^8.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "@types/react": "^19.1.0",
+    "@types/react-dom": "^19.1.0",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.5.6",
+    "sharp": "^0.34.0",
+    "tailwindcss": "^3.4.19",
+    "tsx": "^4.23.15",
+    "typescript": "^5.8.3",
+    "@types/pg": "^8.15.0"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}
